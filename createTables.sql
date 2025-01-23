@@ -193,6 +193,11 @@ CREATE TABLE Albums(
     FOREIGN KEY cover_photo_id REFERENCES Photos(photo_id)
 );
 
+CREATE TABLE Photos(
+    photo_id INTEGER PRIMARY KEY NOT NULL,
+    album_id
+)
+
 CREATE TRIGGER Order_Friend_Pairs
     BEFORE INSERT ON Friends
     FOR EACH ROW
