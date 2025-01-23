@@ -1,3 +1,5 @@
+PRAGMA foreign_keys = ON;
+
 CREATE SEQUENCE CITIES_ID
     START WITH 1
     INCREMENT BY 1;
@@ -32,8 +34,13 @@ CREATE TABLE Users(
 CREATE TABLE Friends(
     user1_id INTEGER NOT NULL,
     user2_id INTEGER NOT NULL,
-    FOREIGN KEY (user1_id) REFERENCES Users(user_id),
-    FOREIGN KEY (user2_id) REFERENCES Users(user_id)
+    FOREIGN KEY (user1_id) 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (user2_id) 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE,
+    PRIMARY KEY (user1_id, user2_id)
 );
 
 CREATE TABLE Cities(
@@ -46,15 +53,25 @@ CREATE TABLE Cities(
 CREATE TABLE User_Current_Cities(
     user_id INTEGER NOT NULL,
     current_city_id INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (current_city_id) REFERENCES Cities(city_id)
+    FOREIGN KEY (user_id) 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (current_city_id) 
+        REFERENCES Cities(city_id)
+        ON DELETE CASCADE,
+    PRIMARY KEY (user_id, current_city_id)
 );
 
 CREATE TABLE User_Hometown_Cities(
     user_id INTEGER NOT NULL,
     hometown_city_id INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (hometown_city_id) REFERENCES Cities(city_id)
+    FOREIGN KEY (user_id) 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (hometown_city_id) 
+        REFERENCES Cities(city_id)
+        ON DELETE CASCADE,
+    PRIMARY KEY (user_id, hometown_city_id)
 );
 
 CREATE TABLE Messages(
@@ -63,8 +80,12 @@ CREATE TABLE Messages(
     receiver_id INTEGER NOT NULL,
     message_content VARCHAR2(2000) NOT NULL,
     sent_time TIMESTAMP NOT NULL,
-    FOREIGN KEY (sender_id) REFERENCES Users(user_id),
-    FOREIGN KEY (receiver_id) REFERENCES Users(user_id)
+    FOREIGN KEY (sender_id) 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (receiver_id) 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE Programs(
@@ -78,8 +99,12 @@ CREATE TABLE Education(
     user_id INTEGER NOT NULL,
     program_id INTEGER PRIMARY KEY NOT NULL,
     program_year INTEGER NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (program_id) REFERENCES Programs(program_id)
+    FOREIGN KEY (user_id) 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (program_id) 
+        REFERENCES Programs(program_id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE User_Events(
@@ -95,8 +120,12 @@ CREATE TABLE User_Events(
     event_city_id INTEGER NOT NULL,
     event_start_time TIMESTAMP,
     event_end_time TIMESTAMP,
-    FOREIGN KEY (event_creator_id) REFERENCES Users(user_id),
-    FOREIGN KEY (event_city_id) REFERENCES Cities(city_id)
+    FOREIGN KEY (event_creator_id) 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (event_city_id) 
+        REFERENCES Cities(city_id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE Participants(
@@ -104,8 +133,13 @@ CREATE TABLE Participants(
     user_id INTEGER NOT NULL,
     confirmation VARCHAR2(100) NOT NULL 
         CHECK (confirmation IN ('Attending', 'Unsure', 'Declines', 'Not_Replied')),
-    FOREIGN KEY (event_id) REFERENCES User_Events(event_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    FOREIGN KEY (event_id) 
+        REFERENCES User_Events(event_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (user_id) 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE,
+    PRIMARY KEY (event_id, user_id)
 );
 
 CREATE TABLE Albums(
@@ -118,13 +152,41 @@ CREATE TABLE Albums(
     album_visibility VARCHAR2(100) NOT NULL 
         CHECK (album_visibility IN ('Everyone', 'Friends', 'Friends_Of_Friends', 'Myself')),
     cover_photo_id INTEGER NOT NULL,
-    FOREIGN KEY album_owner_id REFERENCES Users(user_id),
-    FOREIGN KEY cover_photo_id REFERENCES Photos(photo_id)
+    FOREIGN KEY album_owner_id 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE Photos(
     photo_id INTEGER PRIMARY KEY NOT NULL,
-    album_id
+    album_id INTEGER NOT NULL,
+    photo_caption VARCHAR2(2000),
+    photo_created_time TIMESTAMP NOT NULL,
+    photo_modified_time TIMESTAMP,
+    photo_link VARCHAR2(2000) NOT NULL,
+    FOREIGN KEY album_id 
+        REFERENCES Albums(album_id)
+        ON DELETE CASCADE
+)
+
+ALTER TABLE Albums
+ADD CONSTRAINT cover_photo
+FOREIGN KEY cover_photo_id REFERENCES Photos(photo_id)
+INITIALLY DEFERRED DEFERRABLE;
+
+CREATE TABLE Tags(
+    tag_photo_id INTEGER NOT NULL,
+    tag_subject_id INTEGER NOT NULL,
+    tag_created_time TIMESTAMP NOT NULL,
+    tag_x NUMBER NOT NULL,
+    tag_y NUMBER NOT NULL,
+    FOREIGN KEY tag_photo_id 
+        REFERENCES Photos(photo_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY tag_subject_id 
+        REFERENCES Users(user_id)
+        ON DELETE CASCADE,
+    PRIMARY KEY (tag_photo_id, tag_subject_id)
 )
 
 CREATE TRIGGER Order_Friend_Pairs
