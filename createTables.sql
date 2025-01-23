@@ -78,3 +78,15 @@ CREATE TABLE User_Events(
     FOREIGN KEY (event_city_id) REFERENCES Cities(city_id)
 );
 
+CREATE TRIGGER Order_Friend_Pairs
+    BEFORE INSERT ON Friends
+    FOR EACH ROW
+        DECLARE temp INTEGER;
+        BEGIN
+            IF: NEW.user1_id > NEW.user2_id THEN
+                temp := :NEW.user2_id;
+                :NEW.user2_id := :NEW.user1_id;
+                :NEW.user1_id := temp;
+            END IF;
+        END;
+/
