@@ -12,7 +12,8 @@ CREATE TABLE Friends(
     user1_id INTEGER NOT NULL,
     user2_id INTEGER NOT NULL,
     FOREIGN KEY (user1_id) REFERENCES Users(user_id),
-    FOREIGN KEY (user2_id) REFERENCES Users(user_id)
+    FOREIGN KEY (user2_id) REFERENCES Users(user_id),
+    PRIMARY KEY (user1_id, user2_id)
 );
 
 CREATE TABLE Cities(
@@ -26,14 +27,16 @@ CREATE TABLE User_Current_Cities(
     user_id INTEGER NOT NULL,
     current_city_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (current_city_id) REFERENCES Cities(city_id)
+    FOREIGN KEY (current_city_id) REFERENCES Cities(city_id),
+    PRIMARY KEY (user_id, current_city_id)
 );
 
 CREATE TABLE User_Hometown_Cities(
     user_id INTEGER NOT NULL,
     hometown_city_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id),
-    FOREIGN KEY (hometown_city_id) REFERENCES Cities(city_id)
+    FOREIGN KEY (hometown_city_id) REFERENCES Cities(city_id),
+    PRIMARY KEY (user_id, hometown_city_id)
 );
 
 CREATE TABLE Messages(
@@ -84,7 +87,8 @@ CREATE TABLE Participants(
     confirmation VARCHAR2(100) NOT NULL 
         CHECK (confirmation IN ('Attending', 'Unsure', 'Declines', 'Not_Replied')),
     FOREIGN KEY (event_id) REFERENCES User_Events(event_id),
-    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    PRIMARY KEY (event_id, user_id)
 );
 
 CREATE TABLE Albums(
@@ -103,7 +107,23 @@ CREATE TABLE Albums(
 
 CREATE TABLE Photos(
     photo_id INTEGER PRIMARY KEY NOT NULL,
-    album_id
+    album_id INTEGER NOT NULL,
+    photo_caption VARCHAR2(2000),
+    photo_created_time TIMESTAMP NOT NULL,
+    photo_modified_time TIMESTAMP,
+    photo_link VARCHAR2(2000) NOT NULL,
+    FOREIGN KEY album_id REFERENCES Albums(album_id)
+)
+
+CREATE TABLE Tags(
+    tag_photo_id INTEGER NOT NULL,
+    tag_subject_id INTEGER NOT NULL,
+    tag_created_time TIMESTAMP NOT NULL,
+    tag_x NUMBER NOT NULL,
+    tag_y NUMBER NOT NULL,
+    FOREIGN KEY tag_photo_id REFERENCES Photos(photo_id),
+    FOREIGN KEY tag_subject_id REFERENCES Users(user_id),
+    PRIMARY KEY (tag_photo_id, tag_subject_id)
 )
 
 CREATE TRIGGER Order_Friend_Pairs
