@@ -78,3 +78,26 @@ CREATE TABLE User_Events(
     FOREIGN KEY (event_city_id) REFERENCES Cities(city_id)
 );
 
+CREATE TABLE Participants(
+    event_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL,
+    confirmation VARCHAR2(100) NOT NULL 
+        CHECK (confirmation IN ('Attending', 'Unsure', 'Declines', 'Not_Replied')),
+    FOREIGN KEY (event_id) REFERENCES User_Events(event_id),
+    FOREIGN KEY (user_id) REFERENCES Users(user_id)
+);
+
+CREATE TABLE Albums(
+    album_id INTEGER PRIMARY KEY NOT NULL,
+    album_owner_id INTEGER NOT NULL,
+    album_name VARCHAR2(100) NOT NULL,
+    album_created_time TIMESTAMP NOT NULL,
+    album_modified_time TIMESTAMP,
+    album_link VARCHAR2(2000) NOT NULL,
+    album_visibility VARCHAR2(100) NOT NULL 
+        CHECK (album_visibility IN ('Everyone', 'Friends', 'Friends_Of_Friends', 'Myself')),
+    cover_photo_id INTEGER NOT NULL,
+    FOREIGN KEY album_owner_id REFERENCES Users(user_id),
+    FOREIGN KEY cover_photo_id REFERENCES Photos(photo_id)
+);
+
