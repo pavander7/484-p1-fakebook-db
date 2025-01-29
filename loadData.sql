@@ -39,6 +39,21 @@ INSERT INTO User_Events (event_id, event_creator_id, event_name, event_tagline, 
 SELECT e.event_id, e.event_creator_id, e.event_name, e.event_tagline, e.event_description, 
         e.event_host, e.event_type, e.event_subtype, e.event_address, c.event_city_id, e.event_start_time, 
         e.event_end_time
-FROM project1.Public_Event_Information e JOIN Cities city_id
+FROM project1.Public_Event_Information e JOIN Cities c
 ON e.event_city = c.city_name AND e.event_state = c.state_name AND e.event_country = c.country_name;
 
+INSERT INTO Albums (album_id, album_owner_id, album_name, album_created_time, 
+                    album_modified_time, album_link, album_visibility, cover_photo_id)
+SELECT album_id, album_owner_id, album_name, album_created_time, 
+       album_modified_time, album_link, album_visibility, cover_photo_id
+FROM project1.Public_Photo_Information
+
+INSERT INTO Photos (photo_id, album_id, photo_caption, photo_created_time,
+                   photo_modified_time, photo_link)
+SELECT photo_id, album_id, photo_caption, photo_created_time,
+       photo_modified_time, photo_link
+FROM project1.Public_Photo_Information
+
+INSERT INTO Tags (tag_photo_id, tag_subject_id, tag_created_time, tag_x, tag_y)
+SELECT photo_id, tag_subject_id, tag_created_time, tag_x_coordinate, tag_y_coordinate
+FROM project1.Public_Tag_Information
