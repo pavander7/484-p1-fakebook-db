@@ -1,6 +1,9 @@
 INSERT INTO Users (user_id, first_name, last_name, year_of_birth, month_of_birth, day_of_birth, gender)
 SELECT user_id, first_name, last_name, year_of_birth, month_of_birth, day_of_birth, gender
-FROM project1.Public_User_Information;
+FROM project1.Public_User_Information p
+WHERE NOT EXISTS (
+    SELECT 1 FROM Users u WHERE u.user_id = p.user_id
+);
 
 INSERT INTO Friends (user1_id, user2_id)
 SELECT user1_id, user2_id
