@@ -132,7 +132,7 @@ CREATE TABLE Tags(
 
 ALTER TABLE Albums
     ADD CONSTRAINT cover_photo
-    FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id) ON DELETE CASCADE
+    FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id)
     INITIALLY DEFERRED DEFERRABLE;
 
 CREATE TRIGGER Order_Friend_Pairs
