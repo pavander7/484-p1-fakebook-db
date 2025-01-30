@@ -126,7 +126,7 @@ CREATE TABLE Tags(
     FOREIGN KEY (tag_photo_id) REFERENCES Photos(photo_id) ON DELETE CASCADE,
     FOREIGN KEY (tag_subject_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     PRIMARY KEY (tag_photo_id, tag_subject_id)
-)
+);
 
 ALTER TABLE Albums
     ADD CONSTRAINT cover_photo
