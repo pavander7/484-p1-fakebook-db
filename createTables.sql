@@ -60,8 +60,9 @@ CREATE TABLE Programs(
 
 CREATE TABLE Education(
     user_id INTEGER NOT NULL,
-    program_id INTEGER PRIMARY KEY NOT NULL,
+    program_id INTEGER NOT NULL,
     program_year INTEGER NOT NULL,
+    PRIMARY KEY (user_id, program_id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (program_id) REFERENCES Programs(program_id) ON DELETE CASCADE
 );
