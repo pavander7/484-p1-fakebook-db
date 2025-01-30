@@ -1,5 +1,5 @@
 INSERT INTO Users (user_id, first_name, last_name, year_of_birth, month_of_birth, day_of_birth, gender)
-SELECT user_id, first_name, last_name, year_of_birth, month_of_birth, day_of_birth, gender
+SELECT p.user_id, p.first_name, p.last_name, p.year_of_birth, p.month_of_birth, p.day_of_birth, p.gender
 FROM project1.Public_User_Information p
 WHERE NOT EXISTS (
     SELECT 1 FROM Users u WHERE u.user_id = p.user_id
@@ -29,7 +29,8 @@ ON u.hometown_city = c.city_name AND u.hometown_state = c.state_name AND u.homet
 
 INSERT INTO Programs (institution, concentration, degree)
 SELECT institution_name, program_concentration, program_degree
-FROM project1.Public_User_Information;
+FROM project1.Public_User_Information
+WHERE institution_name IS NOT NULL;
 
 INSERT INTO Education (user_id, program_id, program_year)
 SELECT u.user_id, p.program_id, u.program_year
