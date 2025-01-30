@@ -2,6 +2,7 @@
 
 ALTER TABLE Albums DROP CONSTRAINT cover_photo;
 
+DROP TABLE Tags;
 DROP TABLE Photos;
 DROP TABLE Albums;
 DROP TABLE Participants;
