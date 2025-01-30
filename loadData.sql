@@ -36,8 +36,6 @@ INSERT INTO Programs (institution, concentration, degree)
 SELECT institution_name, program_concentration, program_degree
 FROM project1.Public_User_Information
 WHERE institution_name IS NOT NULL;
-FROM project1.Public_User_Information
-WHERE institution_name IS NOT NULL;
 
 INSERT INTO Education (user_id, program_id, program_year)
 SELECT DISTINCT u.user_id, p.program_id, u.program_year
