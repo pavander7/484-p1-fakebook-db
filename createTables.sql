@@ -27,7 +27,7 @@ CREATE TABLE Cities(
 );
 
 CREATE TABLE User_Current_Cities(
-    user_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL UNIQUE,
     current_city_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (current_city_id) REFERENCES Cities(city_id) ON DELETE CASCADE,
@@ -35,7 +35,7 @@ CREATE TABLE User_Current_Cities(
 );
 
 CREATE TABLE User_Hometown_Cities(
-    user_id INTEGER NOT NULL,
+    user_id INTEGER NOT NULL UNIQUE,
     hometown_city_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES Users(user_id) ON DELETE CASCADE,
     FOREIGN KEY (hometown_city_id) REFERENCES Cities(city_id) ON DELETE CASCADE,
@@ -132,7 +132,7 @@ CREATE TABLE Tags(
 
 ALTER TABLE Albums
     ADD CONSTRAINT cover_photo
-    FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id)
+    FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id) ON DELETE CASCADE
     INITIALLY DEFERRED DEFERRABLE;
 
 CREATE TRIGGER Order_Friend_Pairs
