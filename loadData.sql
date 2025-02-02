@@ -33,7 +33,7 @@ ON u.hometown_city = c.city_name AND u.hometown_state = c.state_name AND u.homet
 WHERE u.current_city IS NOT NULL;
 
 INSERT INTO Programs (institution, concentration, degree)
-SELECT institution_name, program_concentration, program_degree
+SELECT DISTINCT institution_name, program_concentration, program_degree
 FROM project1.Public_User_Information
 WHERE institution_name IS NOT NULL;
 
@@ -57,6 +57,8 @@ WHERE NOT EXISTS (
     SELECT 1 FROM User_Events u WHERE u.event_id = e.event_id
 );
 
+SET AUTOCOMMIT OFF;
+
 INSERT INTO Albums (album_id, album_owner_id, album_name, album_created_time, 
                     album_modified_time, album_link, album_visibility, cover_photo_id)
 SELECT DISTINCT album_id, owner_id, album_name, album_created_time, 
@@ -72,6 +74,9 @@ SELECT photo_id, album_id, photo_caption, photo_created_time,
        photo_modified_time, photo_link
 FROM project1.Public_Photo_Information
 ;
+
+COMMIT;
+SET AUTOCOMMIT ON;
 
 INSERT INTO Tags (tag_photo_id, tag_subject_id, tag_created_time, tag_x, tag_y)
 SELECT DISTINCT photo_id, tag_subject_id, tag_created_time, tag_x_coordinate, tag_y_coordinate
