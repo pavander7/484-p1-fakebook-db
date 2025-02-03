@@ -1,6 +1,7 @@
 -- PRAGMA foreign_keys = ON;
 
-ALTER TABLE Albums DROP CONSTRAINT cover_photo;
+ALTER TABLE Albums DROP CONSTRAINT cover_photo_fk;
+ALTER TABLE Photos DROP CONSTRAINT album_id_fk;
 
 DROP TABLE Tags;
 DROP TABLE Photos;

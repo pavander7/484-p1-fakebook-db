@@ -115,8 +115,7 @@ CREATE TABLE Photos(
     photo_caption VARCHAR2(2000),
     photo_created_time TIMESTAMP NOT NULL,
     photo_modified_time TIMESTAMP,
-    photo_link VARCHAR2(2000) NOT NULL,
-    FOREIGN KEY (album_id) REFERENCES Albums(album_id) ON DELETE CASCADE
+    photo_link VARCHAR2(2000) NOT NULL
 );
 
 CREATE TABLE Tags(
@@ -131,8 +130,13 @@ CREATE TABLE Tags(
 );
 
 ALTER TABLE Albums
-    ADD CONSTRAINT cover_photo
-    FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id) ON DELETE CASCADE
+    ADD CONSTRAINT cover_photo_fk
+    FOREIGN KEY (cover_photo_id) REFERENCES Photos(photo_id)
+    INITIALLY DEFERRED DEFERRABLE;
+
+ALTER TABLE Photos
+    ADD CONSTRAINT album_id_fk
+    FOREIGN KEY (album_id) REFERENCES Albums(album_id)
     INITIALLY DEFERRED DEFERRABLE;
 
 CREATE TRIGGER Order_Friend_Pairs
